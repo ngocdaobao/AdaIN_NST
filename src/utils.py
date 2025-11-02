@@ -22,6 +22,10 @@ class ImageDataset(Dataset):
         self.root_dir = root_dir
         self.transform = transform
         self.image_files = [f for f in os.listdir(root_dir) if f.endswith(('.png', '.jpg', '.jpeg'))]
+    
+    def __len__(self):
+        return len(self.image_files)
+
     def __getitem__(self, index):
         img_path = os.path.join(self.root_dir, self.image_files[index])
         image = Image.open(img_path).convert("RGB")
