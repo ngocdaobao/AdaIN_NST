@@ -4,4 +4,6 @@ python src/main.py \
     --batch_size 8 \
     --lr 0.0001 \
     --lambda_style 0.5 \
-    --num_workers 42
+    --num_workers 4 \
+    --seed 42 \
+    --shuffle True
