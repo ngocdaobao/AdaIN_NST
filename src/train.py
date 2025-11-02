@@ -1,9 +1,9 @@
 import torch
-from torchvision.transforms import to_pil_image
+from torchvision.transforms import ToPILImage
 import tqdm
 from PIL import Image
 from utils import preprocess_image
-from loguru import logger
+
 
 def trainer(model, style_loader, content_loader, optimizer, device, num_epochs=10):
     loss_item = []
@@ -39,6 +39,8 @@ def trainer(model, style_loader, content_loader, optimizer, device, num_epochs=1
     return loss_item
 
 def inference(model, content_path, style_path, device):
+    to_pil_image = ToPILImage()
+
     # Open image and preprocess
     content_image = Image.open(content_path).convert('RGB')
     style_image = Image.open(style_path).convert('RGB')
