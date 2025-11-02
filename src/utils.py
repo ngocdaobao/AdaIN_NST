@@ -21,8 +21,9 @@ class ImageDataset(Dataset):
     def __init__(self, root_dir, transform=transforms_pipeline):
         self.root_dir = root_dir
         self.transform = transform
-        self.image_files = [f for f in os.listdir(root_dir) if f.endswith(('.png', '.jpg', '.jpeg'))]
-    
+        self.image_files_total = [f for f in os.listdir(root_dir) if f.endswith(('.png', '.jpg', '.jpeg'))]
+        #Sample a subset about 40k images for faster training
+        self.image_files = self.image_files_total[:40000]
     def __len__(self):
         return len(self.image_files)
 
