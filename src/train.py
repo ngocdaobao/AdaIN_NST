@@ -11,7 +11,7 @@ def trainer(model, style_loader, content_loader, optimizer, device, num_epochs=1
 
     for epoch in range(num_epochs):
         loss_list = [] # Store losses for the epoch
-        for content in tqdm.tqdm(content_loader, des=f"Epoch {epoch+1}/{num_epochs} - Content"):
+        for content in tqdm.tqdm(content_loader, desc=f"Epoch {epoch+1}/{num_epochs} - Content"):
             #Random style batch
             try:
                 style = next(style_loader)
