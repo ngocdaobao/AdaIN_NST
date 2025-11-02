@@ -14,10 +14,14 @@ def trainer(model, style_loader, content_loader, optimizer, device, num_epochs=1
         for content in tqdm.tqdm(content_loader, desc=f"Epoch {epoch+1}/{num_epochs} - Content"):
             #Random style batch
             try:
-                style = next(style_iteration)
+                style = next(style_iteration)  # Get the next batch
 
                 content = content.to(device)
-                style = style.to(device)
+                # Convert list to proper batch tensor if needed
+                if isinstance(style, list):
+                    style = torch.stack(style).to(device)
+                else:
+                    style = style.to(device)
 
                 loss, loss_content, loss_style = model(content, style, training=True)
                 loss_list.append(loss.item())
