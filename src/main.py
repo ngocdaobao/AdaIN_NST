@@ -4,7 +4,7 @@ import argparse
 
 from utils import data_loader
 from model import StyleTransferModel, VGG19Encoder, Decoder
-from train import trainer
+from train import trainer, inference
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Neural Style Transfer Training')
@@ -36,3 +36,8 @@ if __name__ == "__main__":
     optimizer = optim.Adam(model.parameters(), lr=lr)
     loss_item = trainer(model, iter(style_loader), content_loader, optimizer, device, num_epochs=epoch)
     print("Training finished.")
+
+    # Inference
+    inference(model=model, content_path='example/content.jpg', style_path='example/style.jpg', device=device)
+    print("Inference finished.")
+
