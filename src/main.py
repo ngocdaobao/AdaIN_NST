@@ -34,7 +34,7 @@ if __name__ == "__main__":
         encoder_model = VGG19Encoder()
     model = StyleTransferModel(encoder_model=encoder_model).to(device)
     optimizer = optim.Adam(model.parameters(), lr=lr)
-    loss_item = trainer(model, iter(style_loader), content_loader, optimizer, device, num_epochs=epoch)
+    loss_item = trainer(model, style_loader, content_loader, optimizer, device, num_epochs=epoch)
     print("Training finished.")
 
     # Inference
