@@ -8,13 +8,13 @@ from utils import preprocess_image
 def trainer(model, style_loader, content_loader, optimizer, device, num_epochs=10):
     loss_item = []
     model.train()
-
+    style_iteration = iter(style_loader)
     for epoch in range(num_epochs):
         loss_list = [] # Store losses for the epoch
         for content in tqdm.tqdm(content_loader, desc=f"Epoch {epoch+1}/{num_epochs} - Content"):
             #Random style batch
             try:
-                style = next(style_loader)
+                style = next(style_iteration)
 
                 content = content.to(device)
                 style = style.to(device)
