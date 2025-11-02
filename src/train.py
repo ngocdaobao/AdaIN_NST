@@ -12,28 +12,24 @@ def trainer(model, style_loader, content_loader, optimizer, device, num_epochs=1
     for epoch in range(num_epochs):
         loss_list = [] # Store losses for the epoch
         for content in tqdm.tqdm(content_loader, desc=f"Epoch {epoch+1}/{num_epochs} - Content"):
+            content = content.to(device)
             #Random style batch
+            style_iter = iter(style_loader)
             try:
-                style = next(style_iteration)  # Get the next batch
-
-                content = content.to(device)
-                # Convert list to proper batch tensor if needed
-                if isinstance(style, list):
-                    style = torch.stack(style).to(device)
-                else:
-                    style = style.to(device)
-
-                loss, loss_content, loss_style = model(content, style, training=True)
-                loss_list.append(loss.item())
-
-                optimizer.zero_grad()
-                loss.backward()
-                optimizer.step()
-
-            #Reinitialize style loader if exhausted
+                style = next(style_iter)[0] #Get images
             except StopIteration:
-                style_loader = iter(style_loader)
-                style = next(style_loader)
+                # Restart the style iterator if exhausted
+                style_iter = iter(style_loader)
+                style = next(style_iter)[0] #Get images
+            style = style.to(device)
+
+            loss, loss_content, loss_style = model(content, style, training=True)
+            loss_list.append(loss.item())
+
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
         avg_loss = sum(loss_list) / len(loss_list)
         loss_item.append(avg_loss)
         print(f"Epoch [{epoch+1}/{num_epochs}], Loss: {avg_loss:.4f}")
