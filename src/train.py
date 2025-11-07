@@ -54,4 +54,4 @@ def inference(model, content_path, style_path, device):
         generated_image = to_pil_image(generated_image)
         # Save or display the generated image
         print("Inference complete. Saving generated image as 'generated_image.png'.")
-        generated_image.save('output/generated_image.png')
+        generated_image.save('generated_image.png')
