@@ -34,7 +34,7 @@ def trainer(model, style_loader, content_loader, optimizer, device, num_epochs=1
         loss_item.append(avg_loss)
         print(f"Epoch [{epoch+1}/{num_epochs}], Loss: {avg_loss:.4f}")
     print("Training complete. Saving model...")
-    torch.save(model.state_dict(), 'output/style_transfer_model.pth')
+    torch.save(model.state_dict(), 'style_transfer_model.pth')
 
     return loss_item
 
