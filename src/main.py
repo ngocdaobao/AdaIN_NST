@@ -38,6 +38,6 @@ if __name__ == "__main__":
     print("Training finished.")
 
     # Inference
-    inference(model=model, content_path='AdaIN_NST/example/content.jpg', style_path='AdaIN_NST/example/style.jpg', device=device)
-    print("Inference finished.")
+    # inference(model=model, content_path='AdaIN_NST/example/content.jpg', style_path='AdaIN_NST/example/style.jpg', device=device)
+    # print("Inference finished.")
 
