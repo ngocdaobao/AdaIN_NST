@@ -32,7 +32,12 @@ if __name__ == "__main__":
 
     if pretrained_encoder == 'vgg19':
         encoder_model = VGG19Encoder()
-    model = StyleTransferModel(encoder_model=encoder_model).to(device)
+        
+    ckpt = torch.load('/kaggle/input/style-transfer/pytorch/style_transfer/1/style_transfer_model.pth')
+    model = StyleTransferModel(encoder_model=encoder_model)
+    model.load_state_dict(ckpt)
+    model.to(device)
+    
     optimizer = optim.Adam(model.parameters(), lr=lr)
     loss_item = trainer(model, style_loader, content_loader, optimizer, device, num_epochs=epoch)
     print("Training finished.")
@@ -40,4 +45,5 @@ if __name__ == "__main__":
     # Inference
     # inference(model=model, content_path='AdaIN_NST/example/content.jpg', style_path='AdaIN_NST/example/style.jpg', device=device)
     # print("Inference finished.")
+
 
