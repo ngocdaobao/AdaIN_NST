@@ -25,7 +25,7 @@ def trainer(model, style_loader, content_loader, optimizer, device, num_epochs=1
 
             loss, loss_content, loss_style = model(content, style, training=True)
             loss_list.append(loss.item())
-            print(f'Loss:{loss.item()}')
+            
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
@@ -55,4 +55,5 @@ def inference(model, content_path, style_path, device):
         # Save or display the generated image
         print("Inference complete. Saving generated image as 'generated_image.png'.")
         generated_image.save('generated_image.png')
+
 
