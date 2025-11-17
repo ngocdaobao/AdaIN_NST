@@ -33,7 +33,7 @@ if __name__ == "__main__":
     if pretrained_encoder == 'vgg19':
         encoder_model = VGG19Encoder()
         
-    ckpt = torch.load('/kaggle/input/nst-epoch-8/pytorch/default/1/style_transfer_model.pth')
+    ckpt = torch.load('/kaggle/input/nst-17epoch/pytorch/default/1/style_transfer_model.pth')
     model = StyleTransferModel(encoder_model=encoder_model)
     model.load_state_dict(ckpt)
     model.to(device)
@@ -45,6 +45,7 @@ if __name__ == "__main__":
     # Inference
     # inference(model=model, content_path='AdaIN_NST/example/content.jpg', style_path='AdaIN_NST/example/style.jpg', device=device)
     # print("Inference finished.")
+
 
 
 
