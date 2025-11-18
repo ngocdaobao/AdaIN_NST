@@ -46,9 +46,9 @@ class VGG19Encoder(nn.Module):
         return self._adain_output
 
 # Decoder
-class Decoder(nn.Module):
+class Decoder(nn.Module, load_path = None):
     # Decoder as a mirror of VGG19 up to relu4_1, replacing maxpool with nearest upsampling
-    def __init__(self):
+    def __init__(self, load_path = None):
         super(Decoder, self).__init__()
         self.decoder_layers = nn.Sequential(
             nn.Conv2d(512, 256, kernel_size=3, padding=1),
@@ -75,7 +75,10 @@ class Decoder(nn.Module):
             nn.ReLU(inplace=True),
             nn.Conv2d(64,3, kernel_size=3, padding=1),)
         
-        self.decoder_layers.apply(weights_init)
+        if load_path is not None:
+            self.load_state_dict(torch.load(load_path))
+        else:
+            self.decoder_layers.apply(weights_init)
     
     def forward(self, x):
         h=self.decoder_layers(x)

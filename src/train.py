@@ -2,6 +2,7 @@ import torch
 from torchvision.transforms import ToPILImage
 import tqdm
 from PIL import Image
+import matplotlib.pyplot as plt
 from utils import preprocess_image
 
 def lr_scheduler(optimizer, epoch, init_lr=1e-4, lr_decay_epoch=5):
@@ -13,6 +14,7 @@ def lr_scheduler(optimizer, epoch, init_lr=1e-4, lr_decay_epoch=5):
 
 
 def trainer(model, style_loader, content_loader, optimizer, device, num_epochs=10):
+    all_loss = []
     loss_item = []
     model.train()
     style_iteration = iter(style_loader)
@@ -37,7 +39,7 @@ def trainer(model, style_loader, content_loader, optimizer, device, num_epochs=1
 
             loss, loss_content, loss_style = model(content, style, training=True)
             loss_list.append(loss.item())
-            
+            all_loss.append(loss.item())
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
@@ -49,8 +51,18 @@ def trainer(model, style_loader, content_loader, optimizer, device, num_epochs=1
         print(f"Epoch [{epoch+1}/{num_epochs}], Loss: {avg_loss:.4f}")
     print("Training complete. Saving model...")
     torch.save(model.state_dict(), 'style_transfer_model.pth')
+    #Visualize loss curve
+    plt.figure(figsize=(10,5))
+    iters = range(1, len(all_loss)+1)
+    plt.plot(iters, all_loss, label='Training Loss')
+    plt.xlabel('Iteration')
+    plt.ylabel('Loss')
+    plt.title('Training Loss Curve')
+    plt.legend()
+    plt.show()
+    plt.savefig('training_loss_curve.png')
 
-    return loss_item
+    return loss_item, all_loss
 
 def inference(model, content_path, style_path, device):
     to_pil_image = ToPILImage()

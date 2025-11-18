@@ -1,9 +1,11 @@
 import torch
+from torch import nn
 from torchvision.datasets import ImageFolder
 from torch.utils.data import DataLoader, Dataset
 from torchvision import transforms
 import os
 from PIL import Image
+
 
 transforms_pipeline = transforms.Compose([
     transforms.Resize((224, 224)),
