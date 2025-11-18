@@ -11,6 +11,12 @@ transforms_pipeline = transforms.Compose([
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
 ])
 
+def weights_init(m):
+    if isinstance(m, nn.Conv2d):
+        nn.init.kaiming_normal_(m.weight, mode='fan_in', nonlinearity='relu')
+        if m.bias is not None:
+            nn.init.constant_(m.bias, 0)
+
 def preprocess_image(image):
     image = transforms_pipeline(image)
     image = image.unsqueeze(0)  # Add batch dimension

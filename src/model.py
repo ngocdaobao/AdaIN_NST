@@ -2,6 +2,7 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 from torchvision.models import vgg19
+from utils import weights_init
 
 # Encoder
 class VGG19Encoder(nn.Module):
@@ -73,6 +74,8 @@ class Decoder(nn.Module):
             nn.Conv2d(64,64, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
             nn.Conv2d(64,3, kernel_size=3, padding=1),)
+        
+        self.decoder_layers.apply(weights_init)
     
     def forward(self, x):
         h=self.decoder_layers(x)
