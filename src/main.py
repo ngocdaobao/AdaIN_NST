@@ -35,7 +35,7 @@ if __name__ == "__main__":
     model = StyleTransferModel(encoder_model=encoder_model).to(device)
     print(f'Number of model parameters: {sum(p.numel() for p in model.parameters() if p.requires_grad)}')
     optimizer = optim.Adam(model.parameters(), lr=lr)
-    loss_item = trainer(model, style_loader, content_loader, optimizer, device, num_epochs=epoch)
+    loss_item, all_loss = trainer(model, style_loader, content_loader, optimizer, device, num_epochs=epoch)
     print("Training finished.")
 
     # Inference
