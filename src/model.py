@@ -46,9 +46,9 @@ class VGG19Encoder(nn.Module):
         return self._adain_output
 
 # Decoder
-class Decoder(nn.Module, load_path = None):
+class Decoder(nn.Module):
     # Decoder as a mirror of VGG19 up to relu4_1, replacing maxpool with nearest upsampling
-    def __init__(self, load_path = None):
+    def __init__(self):
         super(Decoder, self).__init__()
         self.decoder_layers = nn.Sequential(
             nn.Conv2d(512, 256, kernel_size=3, padding=1),
@@ -74,11 +74,6 @@ class Decoder(nn.Module, load_path = None):
             nn.Conv2d(64,64, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
             nn.Conv2d(64,3, kernel_size=3, padding=1),)
-        
-        if load_path is not None:
-            self.load_state_dict(torch.load(load_path))
-        else:
-            self.decoder_layers.apply(weights_init)
     
     def forward(self, x):
         h=self.decoder_layers(x)
@@ -86,10 +81,14 @@ class Decoder(nn.Module, load_path = None):
     
 # Style Transfer Model
 class StyleTransferModel(nn.Module):
-    def __init__(self, encoder_model = VGG19Encoder(), decoder_model = Decoder()):
+    def __init__(self, encoder_model = VGG19Encoder(), decoder_model = Decoder(), load_path = None):
         super(StyleTransferModel, self).__init__()
         self.encoder = encoder_model
         self.decoder = decoder_model
+        if load_path is not None:
+            self.decoder.load_state_dict(torch.load(load_path))
+        else:
+            self.decoder.apply(weights_init)
     
     def extract_features(self, content, style):
         content_features, _ = self.encoder(content)
