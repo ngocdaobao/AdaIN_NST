@@ -2,7 +2,7 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 from torchvision.models import vgg19
-from utils import weights_init
+from src.utils import weights_init
 
 # Encoder
 class VGG19Encoder(nn.Module):
