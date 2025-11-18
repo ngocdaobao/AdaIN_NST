@@ -4,12 +4,24 @@ import tqdm
 from PIL import Image
 from utils import preprocess_image
 
+def lr_scheduler(optimizer, epoch, init_lr=1e-4, lr_decay_epoch=5):
+    """Decay learning rate by a factor of 0.1 every lr_decay_epoch epochs."""
+    lr = init_lr * (0.1 ** (epoch // lr_decay_epoch))
+    for param_group in optimizer.param_groups:
+        param_group['lr'] = lr
+    return optimizer
+
 
 def trainer(model, style_loader, content_loader, optimizer, device, num_epochs=10):
     loss_item = []
     model.train()
     style_iteration = iter(style_loader)
+    # keep the original learning rate so scheduler computes decay from this base
+    base_lr = optimizer.param_groups[0]['lr']
     for epoch in range(num_epochs):
+        # update learning rate once per epoch (avoid repeated per-batch decay)
+        optimizer = lr_scheduler(optimizer, epoch, init_lr=base_lr, lr_decay_epoch=5)
+        print(f"Epoch {epoch+1}/{num_epochs}, Learning Rate: {optimizer.param_groups[0]['lr']}")
         loss_list = [] # Store losses for the epoch
         for content in tqdm.tqdm(content_loader, desc=f"Epoch {epoch+1}/{num_epochs} - Content"):
             content = content.to(device)
@@ -29,6 +41,8 @@ def trainer(model, style_loader, content_loader, optimizer, device, num_epochs=1
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
+
+            # (learning rate updated once at start of epoch)
 
         avg_loss = sum(loss_list) / len(loss_list)
         loss_item.append(avg_loss)
