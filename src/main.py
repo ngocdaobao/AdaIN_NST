@@ -4,7 +4,7 @@ import argparse
 
 from utils import data_loader
 from model import StyleTransferModel, VGG19Encoder, Decoder
-from train import trainer, inference, lr_scheduler
+from train import trainer, inference
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Neural Style Transfer Training')
@@ -33,6 +33,7 @@ if __name__ == "__main__":
     if pretrained_encoder == 'vgg19':
         encoder_model = VGG19Encoder()
     model = StyleTransferModel(encoder_model=encoder_model).to(device)
+    print(f'Number of model parameters: {sum(p.numel() for p in model.parameters() if p.requires_grad)}')
     optimizer = optim.Adam(model.parameters(), lr=lr)
     loss_item = trainer(model, style_loader, content_loader, optimizer, device, num_epochs=epoch)
     print("Training finished.")
