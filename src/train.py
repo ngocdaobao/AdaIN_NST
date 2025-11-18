@@ -13,6 +13,7 @@ def lr_scheduler(optimizer, epoch, init_lr=1e-4, lr_decay_epoch=10):
     return optimizer
 
 
+
 def trainer(model, style_loader, content_loader, optimizer, device, num_epochs=10):
     all_loss = []
     loss_item = []
