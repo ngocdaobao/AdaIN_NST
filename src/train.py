@@ -53,7 +53,7 @@ def trainer(model, style_loader, content_loader, optimizer, device, num_epochs=1
     print("Training complete. Saving model...")
     torch.save(model.state_dict(), 'style_transfer_model.pth')
     #Visualize loss curve
-    plt.figure(figsize=(10,5))
+    plt.figure(figsize=(8,5))
     iters = range(1, len(all_loss)+1)
     plt.plot(iters, all_loss, label='Training Loss')
     plt.xlabel('Iteration')
