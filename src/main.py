@@ -16,6 +16,7 @@ if __name__ == "__main__":
     parser.add_argument('--num_workers', type=int, default=4)
     parser.add_argument('--seed', type=int, default=42)
     parser.add_argument('--shuffle', type=bool, default=True)
+    parser.add_argument('--init_weights', type=bool, default=True, help='Whether to initialize decoder weights randomly')
 
     args = parser.parse_args()
     epoch = args.epoch
