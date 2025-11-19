@@ -16,6 +16,7 @@ if __name__ == "__main__":
     parser.add_argument('--num_workers', type=int, default=4)
     parser.add_argument('--seed', type=int, default=42)
     parser.add_argument('--shuffle', type=bool, default=True)
+    parser.add_argument('--lr_decay_epoch', type=int, default=10)
     parser.add_argument('--load_path', type=string, default='None')
 
     args = parser.parse_args()
@@ -28,13 +29,14 @@ if __name__ == "__main__":
     shuffle = args.shuffle
     seed = args.seed
     load_path = args.load_path
+    lr_decay_epoch = args.lr_decay_epoch
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     style_loader, content_loader = data_loader(batch_size=batch_size, num_workers=num_workers, seed=seed, shuffle=shuffle)
 
     if pretrained_encoder == 'vgg19':
         encoder_model = VGG19Encoder()
-    model = StyleTransferModel(encoder_model=encoder_model, load_path=load_path).to(device)
+    model = StyleTransferModel(encoder_model=encoder_model, load_path=load_path, lr_decay_epoch=lr_decay_epoch).to(device)
     print(f'Number of model parameters: {sum(p.numel() for p in model.parameters() if p.requires_grad)}')
     optimizer = optim.Adam(model.parameters(), lr=lr)
     loss_item, all_loss = trainer(model, style_loader, content_loader, optimizer, device, num_epochs=epoch)
@@ -43,6 +45,7 @@ if __name__ == "__main__":
     # Inference
     # inference(model=model, content_path='AdaIN_NST/example/content.jpg', style_path='AdaIN_NST/example/style.jpg', device=device)
     # print("Inference finished.")
+
 
 
 
