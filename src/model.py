@@ -81,11 +81,11 @@ class Decoder(nn.Module):
     
 # Style Transfer Model
 class StyleTransferModel(nn.Module):
-    def __init__(self, encoder_model = VGG19Encoder(), decoder_model = Decoder(), load_path = None):
+    def __init__(self, encoder_model = VGG19Encoder(), decoder_model = Decoder(), load_path = 'None'):
         super(StyleTransferModel, self).__init__()
         self.encoder = encoder_model
         self.decoder = decoder_model
-        if load_path is not None:
+        if load_path != 'None':
             self.decoder.load_state_dict(torch.load(load_path))
     
     def extract_features(self, content, style):
@@ -130,4 +130,5 @@ class StyleTransferModel(nn.Module):
             #Inference mode: training=False
 
             return generated_image
+
 
