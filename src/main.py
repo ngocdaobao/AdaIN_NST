@@ -17,7 +17,7 @@ if __name__ == "__main__":
     parser.add_argument('--seed', type=int, default=42)
     parser.add_argument('--shuffle', type=bool, default=True)
     parser.add_argument('--lr_decay_epoch', type=int, default=10)
-    parser.add_argument('--load_path', type=string, default='None')
+    parser.add_argument('--load_path', type=str, default='None')
 
     args = parser.parse_args()
     epoch = args.epoch
@@ -45,6 +45,7 @@ if __name__ == "__main__":
     # Inference
     # inference(model=model, content_path='AdaIN_NST/example/content.jpg', style_path='AdaIN_NST/example/style.jpg', device=device)
     # print("Inference finished.")
+
 
 
 
