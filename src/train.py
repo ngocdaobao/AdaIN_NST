@@ -41,6 +41,7 @@ def trainer(model, style_loader, content_loader, optimizer, device, lr_decay_epo
             loss, loss_content, loss_style = model(content, style, training=True)
             loss_list.append(loss.item())
             all_loss.append(loss.item())
+            print(f'Loss: {loss.item()}     Loss_content: {loss_content.item()}      Loss_style: {loss_style.item()}')
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
@@ -60,7 +61,6 @@ def trainer(model, style_loader, content_loader, optimizer, device, lr_decay_epo
     plt.ylabel('Loss')
     plt.title('Training Loss Curve')
     plt.legend()
-    plt.show()
     plt.savefig('training_loss_curve.png')
 
     return loss_item, all_loss
@@ -82,6 +82,7 @@ def inference(model, content_path, style_path, device):
         # Save or display the generated image
         print("Inference complete. Saving generated image as 'generated_image.png'.")
         generated_image.save('generated_image.png')
+
 
 
 
