@@ -2,7 +2,7 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 from torchvision.models import vgg19
-from utils import weights_init
+
 
 # Encoder
 class VGG19Encoder(nn.Module):
@@ -81,14 +81,12 @@ class Decoder(nn.Module):
     
 # Style Transfer Model
 class StyleTransferModel(nn.Module):
-    def __init__(self, encoder_model = VGG19Encoder(), decoder_model = Decoder(), load_path = None, init_weights=True):
+    def __init__(self, encoder_model = VGG19Encoder(), decoder_model = Decoder(), load_path = None):
         super(StyleTransferModel, self).__init__()
         self.encoder = encoder_model
         self.decoder = decoder_model
         if load_path is not None:
             self.decoder.load_state_dict(torch.load(load_path))
-        elif init_weights:
-            self.decoder.apply(weights_init)
     
     def extract_features(self, content, style):
         content_features, _ = self.encoder(content)
@@ -132,3 +130,4 @@ class StyleTransferModel(nn.Module):
             #Inference mode: training=False
 
             return generated_image
+
