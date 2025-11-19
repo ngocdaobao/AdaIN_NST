@@ -36,7 +36,9 @@ if __name__ == "__main__":
 
     if pretrained_encoder == 'vgg19':
         encoder_model = VGG19Encoder()
-    model = StyleTransferModel(encoder_model=encoder_model, load_path=load_path).to(device)
+    model = StyleTransferModel(encoder_model=encoder_model).to(device)
+    if load_path != 'None':
+        model.load_state_dict(torch.load(load_path))
     print(f'Number of model parameters: {sum(p.numel() for p in model.parameters() if p.requires_grad)}')
     optimizer = optim.Adam(model.parameters(), lr=lr)
     loss_item, all_loss = trainer(model, style_loader, content_loader, optimizer, device, lr_decay_epoch=lr_decay_epoch, num_epochs=epoch)
@@ -45,6 +47,7 @@ if __name__ == "__main__":
     # Inference
     # inference(model=model, content_path='AdaIN_NST/example/content.jpg', style_path='AdaIN_NST/example/style.jpg', device=device)
     # print("Inference finished.")
+
 
 
 
