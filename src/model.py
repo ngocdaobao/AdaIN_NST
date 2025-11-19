@@ -2,7 +2,7 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 from torchvision.models import vgg19
-from src.utils import weights_init
+from utils import weights_init
 
 # Encoder
 class VGG19Encoder(nn.Module):
@@ -130,4 +130,5 @@ class StyleTransferModel(nn.Module):
             return total_loss, loss_content, loss_style
         else:
             #Inference mode: training=False
+
             return generated_image
