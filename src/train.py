@@ -27,6 +27,9 @@ def trainer(model, style_loader, content_loader, optimizer, device, lr_decay_epo
         print(f"Epoch {epoch+1}/{num_epochs}, Learning Rate: {optimizer.param_groups[0]['lr']}")
         loss_list = [] # Store losses for the epoch
         for content in tqdm.tqdm(content_loader, desc=f"Epoch {epoch+1}/{num_epochs} - Content"):
+            #Get images in content
+            content_iter = iter(content_loader)
+            content = next(content_iter)[0]
             content = content.to(device)
             #Random style batch
             style_iter = iter(style_loader)
