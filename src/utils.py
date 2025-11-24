@@ -50,7 +50,7 @@ def data_loader(batch_size=32, shuffle=True, num_workers=4, seed=42):
     style_loader = DataLoader(style_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=num_workers)
 
     #for content images
-    content_dataset = ImageDataset(root_dir='/kaggle/input/coco-2014-dataset-for-yolov3/coco2014/images/train2014', transform=transforms_pipeline)
+    content_dataset = ImageFolder(root='/kaggle/input/celebrity-face-image-dataset/Celebrity Faces Dataset', transform=transforms_pipeline)
     content_loader = DataLoader(content_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=num_workers)
     return style_loader, content_loader
 
