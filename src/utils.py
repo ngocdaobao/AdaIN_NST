@@ -29,8 +29,8 @@ class ImageDataset(Dataset):
         self.root_dir = root_dir
         self.transform = transform
         self.image_files_total = [f for f in os.listdir(root_dir) if f.endswith(('.png', '.jpg', '.jpeg'))]
-        #Sample a subset about 40k images for faster training
-        self.image_files = self.image_files_total[:20000]
+        #Sample a subset about 20k images for faster training
+        self.image_files = self.image_files_total
     def __len__(self):
         return len(self.image_files)
 
@@ -50,7 +50,7 @@ def data_loader(batch_size=32, shuffle=True, num_workers=4, seed=42):
     style_loader = DataLoader(style_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=num_workers)
 
     #for content images
-    content_dataset = ImageFolder(root='/kaggle/input/celebrity-face-image-dataset/Celebrity Faces Dataset', transform=transforms_pipeline)
+    content_dataset = ImageDataset(root_dir='/kaggle/input/celebahq-resized-256x256/celeba_hq_256', transform=transforms_pipeline)
     content_loader = DataLoader(content_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=num_workers)
     return style_loader, content_loader
 
