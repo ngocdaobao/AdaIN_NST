@@ -14,7 +14,7 @@ def lr_scheduler(optimizer, epoch, init_lr=1e-4, lr_decay_epoch=10):
 
 
 
-def trainer(model, style_loader, content_loader, optimizer, device, num_epochs=10):
+def trainer(model, style_loader, content_loader, optimizer, device, lr_decay_epoch, num_epochs=10):
     all_loss = []
     loss_item = []
     model.train()
@@ -23,7 +23,7 @@ def trainer(model, style_loader, content_loader, optimizer, device, num_epochs=1
     base_lr = optimizer.param_groups[0]['lr']
     for epoch in range(num_epochs):
         # update learning rate once per epoch (avoid repeated per-batch decay)
-        optimizer = lr_scheduler(optimizer, epoch, init_lr=base_lr, lr_decay_epoch=10)
+        optimizer = lr_scheduler(optimizer, epoch, init_lr=base_lr, lr_decay_epoch=lr_decay_epoch)
         print(f"Epoch {epoch+1}/{num_epochs}, Learning Rate: {optimizer.param_groups[0]['lr']}")
         loss_list = [] # Store losses for the epoch
         for content in tqdm.tqdm(content_loader, desc=f"Epoch {epoch+1}/{num_epochs} - Content"):
@@ -41,6 +41,7 @@ def trainer(model, style_loader, content_loader, optimizer, device, num_epochs=1
             loss, loss_content, loss_style = model(content, style, training=True)
             loss_list.append(loss.item())
             all_loss.append(loss.item())
+            print(f'Loss: {loss.item()}     Loss_content: {loss_content.item()}      Loss_style: {loss_style.item()}')
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
@@ -60,7 +61,6 @@ def trainer(model, style_loader, content_loader, optimizer, device, num_epochs=1
     plt.ylabel('Loss')
     plt.title('Training Loss Curve')
     plt.legend()
-    plt.show()
     plt.savefig('training_loss_curve.png')
 
     return loss_item, all_loss
@@ -82,6 +82,8 @@ def inference(model, content_path, style_path, device):
         # Save or display the generated image
         print("Inference complete. Saving generated image as 'generated_image.png'.")
         generated_image.save('generated_image.png')
+
+
 
 
 
