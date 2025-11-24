@@ -13,6 +13,7 @@ if __name__ == "__main__":
     parser.add_argument('--batch_size', type=int, default=8)
     parser.add_argument('--lr', type=float, default=1e-4)
     parser.add_argument('--lambda_style', type=float, default=0.5, help='Weight for style loss, adjust for temperature of style transfer')
+    parser.add_argument('--lambda_content', type=float, default=0.5, help='Weight for content loss')
     parser.add_argument('--num_workers', type=int, default=4)
     parser.add_argument('--seed', type=int, default=42)
     parser.add_argument('--shuffle', type=bool, default=True)

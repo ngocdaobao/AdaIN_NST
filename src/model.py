@@ -114,7 +114,7 @@ class StyleTransferModel(nn.Module):
             loss_style += F.mse_loss(gf_mean, sf_mean) + F.mse_loss(gf_std, sf_std)
         return loss_style
     
-    def forward(self, content, style, lambda_style = 0.5, training=True):
+    def forward(self, content, style,lambda_content = 0.5, lambda_style = 0.5, training=True):
         content_features, style_features, style_middle, adain = self.extract_features(content, style)
         generated_image, generate_features, generated_middle = self.generate(adain)
 
@@ -122,7 +122,7 @@ class StyleTransferModel(nn.Module):
         #Compute losses
             loss_content = self.content_loss(content_features, generate_features)
             loss_style = self.style_loss(style_middle, generated_middle)
-            total_loss = loss_content + lambda_style * loss_style
+            total_loss = lambda_content * loss_content + lambda_style * loss_style
             return total_loss, loss_content, loss_style
         else:
             #Inference mode: training=False
