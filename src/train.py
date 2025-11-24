@@ -17,6 +17,8 @@ def lr_scheduler(optimizer, epoch, init_lr=1e-4, lr_decay_epoch=10):
 def trainer(model, style_loader, content_loader, optimizer, device, lr_decay_epoch, num_epochs=10):
     all_loss = []
     loss_item = []
+    loss_content_list = []
+    loss_style_list = []
     model.train()
     style_iteration = iter(style_loader)
     # keep the original learning rate so scheduler computes decay from this base
@@ -40,6 +42,8 @@ def trainer(model, style_loader, content_loader, optimizer, device, lr_decay_epo
 
             loss, loss_content, loss_style = model(content, style, training=True)
             loss_list.append(loss.item())
+            loss_content_list.append(loss_content.item())
+            loss_style_list.append(loss_style.item())
             all_loss.append(loss.item())
             print(f'Loss: {loss.item()}     Loss_content: {loss_content.item()}      Loss_style: {loss_style.item()}')
             optimizer.zero_grad()
@@ -56,7 +60,10 @@ def trainer(model, style_loader, content_loader, optimizer, device, lr_decay_epo
     #Visualize loss curve
     plt.figure(figsize=(8,5))
     iters = range(1, len(all_loss)+1)
-    plt.plot(iters, all_loss, label='Training Loss')
+    #Visualize loss, loss_content and loss_style curves
+    plt.plot(iters, all_loss, label='Training Loss', color='blue')
+    plt.plot(iters, loss_content_list, label='Content Loss', color='green')
+    plt.plot(iters, loss_style_list, label='Style Loss', color='red')
     plt.xlabel('Iteration')
     plt.ylabel('Loss')
     plt.title('Training Loss Curve')
