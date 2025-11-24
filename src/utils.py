@@ -30,7 +30,7 @@ class ImageDataset(Dataset):
         self.transform = transform
         self.image_files_total = [f for f in os.listdir(root_dir) if f.endswith(('.png', '.jpg', '.jpeg'))]
         #Sample a subset about 20k images for faster training
-        self.image_files = self.image_files_total
+        self.image_files = self.image_files_total[:20000]
     def __len__(self):
         return len(self.image_files)
 
