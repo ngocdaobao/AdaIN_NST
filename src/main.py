@@ -26,6 +26,7 @@ if __name__ == "__main__":
     batch_size = args.batch_size
     lr = args.lr
     lambda_style = args.lambda_style
+    lambda_content = args.lambda_content
     num_workers = args.num_workers
     shuffle = args.shuffle
     seed = args.seed
@@ -37,7 +38,7 @@ if __name__ == "__main__":
 
     if pretrained_encoder == 'vgg19':
         encoder_model = VGG19Encoder()
-    model = StyleTransferModel(encoder_model=encoder_model).to(device)
+    model = StyleTransferModel(encoder_model=encoder_model, lambda_content=lambda_content, lambda_style=lambda_style).to(device)
     if load_path != 'None':
         model.load_state_dict(torch.load(load_path))
     print(f'Number of model parameters: {sum(p.numel() for p in model.parameters() if p.requires_grad)}')

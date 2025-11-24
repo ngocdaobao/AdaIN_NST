@@ -81,10 +81,12 @@ class Decoder(nn.Module):
     
 # Style Transfer Model
 class StyleTransferModel(nn.Module):
-    def __init__(self, encoder_model = VGG19Encoder(), decoder_model = Decoder()):
+    def __init__(self, encoder_model = VGG19Encoder(), decoder_model = Decoder(), lambda_content=0.5, lambda_style=0.5):
         super(StyleTransferModel, self).__init__()
         self.encoder = encoder_model
         self.decoder = decoder_model
+        self.lambda_content = lambda_content
+        self.lambda_style = lambda_style
     
     def extract_features(self, content, style):
         content_features, _ = self.encoder(content)
@@ -114,7 +116,7 @@ class StyleTransferModel(nn.Module):
             loss_style += F.mse_loss(gf_mean, sf_mean) + F.mse_loss(gf_std, sf_std)
         return loss_style
     
-    def forward(self, content, style,lambda_content = 0.5, lambda_style = 0.5, training=True):
+    def forward(self, content, style, training=True):
         content_features, style_features, style_middle, adain = self.extract_features(content, style)
         generated_image, generate_features, generated_middle = self.generate(adain)
 
@@ -122,7 +124,7 @@ class StyleTransferModel(nn.Module):
         #Compute losses
             loss_content = self.content_loss(content_features, generate_features)
             loss_style = self.style_loss(style_middle, generated_middle)
-            total_loss = lambda_content * loss_content + lambda_style * loss_style
+            total_loss = self.lambda_content * loss_content + self.lambda_style * loss_style
             return total_loss, loss_content, loss_style
         else:
             #Inference mode: training=False
