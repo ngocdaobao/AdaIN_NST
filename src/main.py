@@ -18,7 +18,7 @@ if __name__ == "__main__":
     parser.add_argument('--seed', type=int, default=42)
     parser.add_argument('--shuffle', type=bool, default=True)
     parser.add_argument('--lr_decay_epoch', type=int, default=10)
-    parser.add_argument('--load_path', type=str, default='None')
+    parser.add_argument('--load_path', type=str, default=None)
 
     args = parser.parse_args()
     epoch = args.epoch
@@ -39,7 +39,7 @@ if __name__ == "__main__":
     if pretrained_encoder == 'vgg19':
         encoder_model = VGG19Encoder()
     model = StyleTransferModel(encoder_model=encoder_model, lambda_content=lambda_content, lambda_style=lambda_style).to(device)
-    if load_path != 'None':
+    if load_path is not None:
         model.load_state_dict(torch.load(load_path))
     print(f'Number of model parameters: {sum(p.numel() for p in model.parameters() if p.requires_grad)}')
     optimizer = optim.Adam(model.parameters(), lr=lr)
@@ -49,6 +49,7 @@ if __name__ == "__main__":
     # Inference
     # inference(model=model, content_path='AdaIN_NST/example/content.jpg', style_path='AdaIN_NST/example/style.jpg', device=device)
     # print("Inference finished.")
+
 
 
 
