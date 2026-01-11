@@ -99,8 +99,8 @@ class StyleTransferModel(nn.Module):
         generated_features, generated_middle = self.encoder(generated_image)
         return generated_image, generated_features, generated_middle
     
-    def content_loss(self, content_features, generated_features):
-        return F.mse_loss(generated_features, content_features)
+    def content_loss(self, adain, generated_features):
+        return F.mse_loss(generated_features, adain)
     
     def style_loss(self, style_middle, generated_middle):
         loss_style = 0.0
@@ -122,7 +122,7 @@ class StyleTransferModel(nn.Module):
 
         if training:
         #Compute losses
-            loss_content = self.content_loss(content_features, generate_features)
+            loss_content = self.content_loss(adain, generate_features)
             loss_style = self.style_loss(style_middle, generated_middle)
             total_loss = self.lambda_content * loss_content + self.lambda_style * loss_style
             return total_loss, loss_content, loss_style
@@ -130,6 +130,7 @@ class StyleTransferModel(nn.Module):
             #Inference mode: training=False
 
             return generated_image
+
 
 
 
